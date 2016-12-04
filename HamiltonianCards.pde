@@ -5,6 +5,8 @@ int TILE_SIZE,SQ_SIZE;
 
 PImage img_square, img_squareCircle, img_squareTriangle;
 
+int state_current, state_next;
+
 
 void setup(){
 //	size(1246,890);
@@ -24,7 +26,10 @@ void setup(){
 	int x = 0;
 	int y = 0;
 
-	char direction = 'U';
+	char direction = 'D';
+
+	state_next = 1;
+	state_current = 2;
 
 	for(int r=0; r<N_ROWS; r++){
 		x = 0;
@@ -46,14 +51,24 @@ void setup(){
 					rotateSquare(-90);	
 				break;
 
-				case 'U':
+				case 'D':
 					rotateSquare(90);	
 				break;
 
 			}
 
-
-			image(img_squareTriangle,0,0);	
+			// If it is last cell
+			if(direction == 'E'){
+				image(img_square,0,0);
+			}
+			else{
+				if(state_current == state_next){
+					image(img_squareTriangle,0,0);	
+				}
+				else{
+					image(img_squareCircle,0,0);	
+				}
+			}
 
 			popMatrix();
 			x += TILE_SIZE;
