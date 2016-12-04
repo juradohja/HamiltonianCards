@@ -4,6 +4,7 @@ int N_COLS = 10;
 int TILE_SIZE,SQ_SIZE;
 
 PImage img_square, img_squareCircle, img_squareTriangle;
+PImage texture1, texture2;
 
 int state_current, state_next;
 
@@ -14,7 +15,7 @@ char[][] path;
 
 boolean debug = false;
 
-boolean save = false;
+boolean save = true;
 
 
 void setup(){
@@ -25,6 +26,9 @@ void setup(){
 	img_square = loadImage("img/square.png");
 	img_squareTriangle = loadImage("img/square_triangle.png");
 	img_squareCircle = loadImage("img/square_circle.png");
+
+	texture1 = loadImage("img/texture_example_01.png");
+	texture2 = loadImage("img/texture_example_02.png");
 
 
 	design = new int[N_ROWS][N_COLS];
@@ -59,6 +63,7 @@ void setup(){
 			state_current = design[r][c];
 			direction = path[r][c];
 			
+			pushMatrix();
 			switch(direction){
 				case 'R':
 					state_next = design[r][(c+1)];
@@ -94,10 +99,22 @@ void setup(){
 				}
 			}
 
+			popMatrix();
+
+			
 			if(debug){
-				translate(SQ_SIZE/2,SQ_SIZE/2);
+//				translate(SQ_SIZE/2,SQ_SIZE/2);
+			//	ellipse(0,0,70,70);
+
 				fill( state_current==1 ? 0 : 255);
-				ellipse(0,0,70,70);
+				noStroke();
+				if(state_current == 1){
+					image(texture1,0,0);
+				}
+				else{
+					image(texture2,0,0);
+				}
+//				rect(0,0,80,80);
 			}
 
 			popMatrix();
