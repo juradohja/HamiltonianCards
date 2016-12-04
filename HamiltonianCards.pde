@@ -7,6 +7,8 @@ PImage img_square, img_squareCircle, img_squareTriangle;
 
 int state_current, state_next;
 
+int [][] design;
+
 
 void setup(){
 //	size(1246,890);
@@ -17,6 +19,10 @@ void setup(){
 	img_square = loadImage("img/square.png");
 	img_squareTriangle = loadImage("img/square_triangle.png");
 	img_squareCircle = loadImage("img/square_circle.png");
+
+
+	design = new int[N_ROWS][N_COLS];
+	loadDesign("2017.txt");
 
 
 	TILE_SIZE = img_squareCircle.width;
@@ -84,6 +90,23 @@ void rotateSquare(int degrees){
 	translate(SQ_SIZE/2,SQ_SIZE/2);
 	rotate(radians(degrees));
 	translate(-SQ_SIZE/2,-SQ_SIZE/2);
+}
+
+void loadDesign(String filename){
+	String [] lines = loadStrings("designs/"+filename);
+
+	for(int i=0; i<lines.length; i++){
+		String [] chars = split(lines[i],"\t");
+
+		for(int j=0; j<chars.length; j++){
+			design[i][j] = chars[j].equals("x") ? 1 : 2;
+//			print(chars[j]);
+//			print(design[i][j]);
+		}
+//		println();
+	}
+
+
 }
 
 
