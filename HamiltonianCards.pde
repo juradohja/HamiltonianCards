@@ -9,6 +9,8 @@ int state_current, state_next;
 
 int [][] design;
 
+char[][] path;
+
 
 void setup(){
 //	size(1246,890);
@@ -24,6 +26,9 @@ void setup(){
 	design = new int[N_ROWS][N_COLS];
 	loadDesign("2017.txt");
 
+	path = new char[N_ROWS][N_COLS];
+	loadPath("01.txt");
+
 
 	TILE_SIZE = img_squareCircle.width;
 	SQ_SIZE = img_square.width;
@@ -32,10 +37,10 @@ void setup(){
 	int x = 0;
 	int y = 0;
 
-	char direction = 'D';
+	char direction = 'R';
 
 	state_next = 1;
-	state_current = 2;
+	state_current = 1;
 
 	for(int r=0; r<N_ROWS; r++){
 		x = 0;
@@ -43,21 +48,27 @@ void setup(){
 			pushMatrix();
 
 			translate(x,y);
+
+			state_current = design[r][c];
+			direction = path[r][c];
 			
 			switch(direction){
 				case 'R':
-
+					state_next = design[r][(c+1)];
 				break;
 
 				case 'L':
+					state_next = design[r][c-1];
 					rotateSquare(180);
 				break;
 
 				case 'U':
+					state_next = design[r-1][c];
 					rotateSquare(-90);	
 				break;
 
 				case 'D':
+					state_next = design[r+1][c];
 					rotateSquare(90);	
 				break;
 
@@ -82,6 +93,10 @@ void setup(){
 
 		y += TILE_SIZE;
 	}
+
+
+	save(String.format("results/%04d%02d%02d%02d%02d%02d.png",year(),month(),day(),hour(),minute(),second()));
+	exit();
 
 
 }
@@ -109,9 +124,23 @@ void loadDesign(String filename){
 
 }
 
+void loadPath(String filename){
+	String [] lines = loadStrings("paths/"+filename);
+
+	for(int i=0; i<lines.length; i++){
+		String [] chars = split(lines[i],"\t");
+
+		for(int j=0; j<chars.length; j++){
+			path[i][j] = chars[j].charAt(0);
+			print(path[i][j]);
+		}
+		println();
+	}
+
+
+}
 
 void draw(){
-
 
 
 }
