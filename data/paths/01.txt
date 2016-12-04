@@ -1,4 +1,4 @@
-R	D	R	R	D	L	L	L	L	L
+R	D	R	D	D	L	L	L	L	L
 D	L	U	D	D	R	D	R	R	U
 R	R	U	D	D	U	D	U	D	L
 D	L	L	D	D	U	D	U	L	U

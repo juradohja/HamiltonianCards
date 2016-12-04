@@ -12,9 +12,13 @@ int [][] design;
 char[][] path;
 
 
+boolean debug = false;
+
+boolean save = false;
+
+
 void setup(){
-//	size(1246,890);
-	size(1050,1470);
+	size(1066,1486);
 	background(255);
 
 
@@ -41,6 +45,9 @@ void setup(){
 
 	state_next = 1;
 	state_current = 1;
+
+//	translate(TILE_SIZE-SQ_SIZE,TILE_SIZE-SQ_SIZE);
+	translate(16,16);
 
 	for(int r=0; r<N_ROWS; r++){
 		x = 0;
@@ -87,6 +94,12 @@ void setup(){
 				}
 			}
 
+			if(debug){
+				translate(SQ_SIZE/2,SQ_SIZE/2);
+				fill( state_current==1 ? 0 : 255);
+				ellipse(0,0,70,70);
+			}
+
 			popMatrix();
 			x += TILE_SIZE;
 		}
@@ -95,8 +108,10 @@ void setup(){
 	}
 
 
-	save(String.format("results/%04d%02d%02d%02d%02d%02d.png",year(),month(),day(),hour(),minute(),second()));
-	exit();
+	if(save){
+		save(String.format("results/%04d%02d%02d%02d%02d%02d.png",year(),month(),day(),hour(),minute(),second()));
+		exit();
+	}
 
 
 }
