@@ -24,7 +24,7 @@ void setup(){
 	int x = 0;
 	int y = 0;
 
-	char direction = 'R';
+	char direction = 'U';
 
 	for(int r=0; r<N_ROWS; r++){
 		x = 0;
@@ -39,10 +39,15 @@ void setup(){
 				break;
 
 				case 'L':
-				translate(SQ_SIZE/2,SQ_SIZE/2);
-				rotate(radians(180));
-				translate(-SQ_SIZE/2,-SQ_SIZE/2);
+					rotateSquare(180);
+				break;
 
+				case 'U':
+					rotateSquare(-90);	
+				break;
+
+				case 'U':
+					rotateSquare(90);	
 				break;
 
 			}
@@ -58,6 +63,12 @@ void setup(){
 	}
 
 
+}
+
+void rotateSquare(int degrees){
+	translate(SQ_SIZE/2,SQ_SIZE/2);
+	rotate(radians(degrees));
+	translate(-SQ_SIZE/2,-SQ_SIZE/2);
 }
 
 
