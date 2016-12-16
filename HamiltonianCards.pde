@@ -144,8 +144,10 @@ int argIndex(String arg){
 		}
 	}
 	return -1;
+}
 
-
+boolean argExists(String arg){
+	return argIndex(arg)>=0;
 }
 
 void rotateSquare(int degrees) {
