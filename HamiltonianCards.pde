@@ -22,6 +22,12 @@ void setup() {
   size(1066, 1486);
   background(255);
 
+  if(args.length!=0){
+	println(args[0]);
+
+	println(argIndex("--debug"));
+  }
+
 
   img_square = loadImage("img/square.png");
   img_squareTriangle = loadImage("img/square_triangle.png");
@@ -128,6 +134,18 @@ void setup() {
     save(String.format("results/%04d%02d%02d%02d%02d%02d.png", year(), month(), day(), hour(), minute(), second()));
     exit();
   }
+}
+
+// Return the index of the argument in the list. -1 if it's not in the list
+int argIndex(String arg){
+	for(int i=0; i<args.length; i++){
+		if(arg.equals(args[i])){
+			return i;
+		}
+	}
+	return -1;
+
+
 }
 
 void rotateSquare(int degrees) {
@@ -241,7 +259,7 @@ void generatePath(int n, int m) {
             Cell currentNeighbor = neighbors.get(i);
             if (!vC[currentNeighbor.row][currentNeighbor.col-1] && !vC[currentNeighbor.row][currentNeighbor.col+1]) {
               neighbors.remove(i);
-              System.out.println("removed");
+//              System.out.println("removed");
               i--;
             }
           } 
