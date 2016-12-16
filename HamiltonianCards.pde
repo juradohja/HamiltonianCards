@@ -25,7 +25,8 @@ boolean doPage = false;
 
 
 void setup() {
-  size(1066, 1486);
+//  size(1066, 1486);
+  size(1980, 1530);
   background(255);
 
   // CLI usage:
@@ -41,35 +42,35 @@ void setup() {
 
   */
   if(args.length!=0){
-	println(args[0]);
+    println(args[0]);
 
-	if(argExists("--debug")){
-		debug = true;
-	}
+    if(argExists("--debug")){
+        debug = true;
+    }
 
-	if(argExists("--save")){
-		save = true;
-	}
+    if(argExists("--save")){
+        save = true;
+    }
 
-	if(argExists("--page")){
-		doPage = true;
-	}
+    if(argExists("--page")){
+        doPage = true;
+    }
 
-	int argDesign = argIndex("--design");
-	if(argDesign>=0){
-		pathDesign = args[argDesign+1];		
-	}
-	else{
-		pathDesign = "2017.txt";
-	}
+    int argDesign = argIndex("--design");
+    if(argDesign>=0){
+        pathDesign = args[argDesign+1];        
+    }
+    else{
+        pathDesign = "2017.txt";
+    }
 
-	int argPath = argIndex("--path");
-	if(argPath>=0){
-		pathPath = args[argPath+1];		
-	}
-	else{
-		pathPath = "01.txt";
-	}
+    int argPath = argIndex("--path");
+    if(argPath>=0){
+        pathPath = args[argPath+1];        
+    }
+    else{
+        pathPath = "01.txt";
+    }
 
   }
 
@@ -77,6 +78,9 @@ void setup() {
   img_square = loadImage("img/square.png");
   img_squareTriangle = loadImage("img/square_triangle.png");
   img_squareCircle = loadImage("img/square_circle.png");
+
+
+  img_page = loadImage("img/page_template.png");
 
   texture1 = loadImage("img/texture_example_01.png");
   texture2 = loadImage("img/texture_example_02.png");
@@ -96,6 +100,11 @@ void setup() {
   SQ_SIZE = img_square.width;
   println(String.format("Tile size: %d, Square size: %d", TILE_SIZE, SQ_SIZE));
 
+
+  if(doPage){
+	image(img_page,0,0,width,height);
+  }
+
   int x = 0;
   int y = 0;
 
@@ -105,7 +114,15 @@ void setup() {
   state_current = 1;
 
   //  translate(TILE_SIZE-SQ_SIZE,TILE_SIZE-SQ_SIZE);
-  translate(16, 16);
+  if(doPage){
+	translate(width/2+SQ_SIZE*0.9,SQ_SIZE*2);
+	scale(0.8);
+  }
+  else{
+  	translate(16, 16);
+  }
+
+//  scale(0.5);
 
   for (int r=0; r<N_ROWS; r++) {
     x = 0;
@@ -160,9 +177,9 @@ void setup() {
         fill( state_current==1 ? 0 : 255);
         noStroke();
         if (state_current == 1) {
-          image(texture1, 0, 0);
+          image(texture1, 0, 0,SQ_SIZE,SQ_SIZE);
         } else {
-          image(texture2, 0, 0);
+          image(texture2, 0, 0,SQ_SIZE,SQ_SIZE);
         }
         //        rect(0,0,80,80);
       }
