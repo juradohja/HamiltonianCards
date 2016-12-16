@@ -25,6 +25,17 @@ void setup() {
   size(1066, 1486);
   background(255);
 
+  // CLI usage:
+  /*
+  	In processing path:
+	./processing-java --sketch=SKETCH_PATH --run 
+	Options:
+	--design DESIGN_FILENAME 	Choose the design file to process
+	--path PATH_FILENAME		Choose a predefined path file
+	--debug				See the design overlaid to the grid
+	--save				Save the resulting image
+
+  */
   if(args.length!=0){
 	println(args[0]);
 
