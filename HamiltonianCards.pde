@@ -5,6 +5,7 @@ int TILE_SIZE, SQ_SIZE;
 
 PImage img_square, img_squareCircle, img_squareTriangle;
 PImage texture1, texture2;
+PImage img_page;
 
 int state_current, state_next;
 
