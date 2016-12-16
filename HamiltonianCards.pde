@@ -13,6 +13,9 @@ int [][] design;
 char[][] path;
 
 
+String pathDesign;
+String pathPath;
+
 boolean debug = false;
 
 boolean save = false;
@@ -25,7 +28,30 @@ void setup() {
   if(args.length!=0){
 	println(args[0]);
 
-	println(argIndex("--debug"));
+	if(argExists("--debug")){
+		debug = true;
+	}
+
+	if(argExists("--save")){
+		save = true;
+	}
+
+	int argDesign = argIndex("--design");
+	if(argDesign>=0){
+		pathDesign = args[argDesign+1];		
+	}
+	else{
+		pathDesign = "2017.txt";
+	}
+
+	int argPath = argIndex("--path");
+	if(argPath>=0){
+		pathPath = args[argPath+1];		
+	}
+	else{
+		pathPath = "01.txt";
+	}
+
   }
 
 
@@ -41,10 +67,10 @@ void setup() {
 
 
   design = new int[N_ROWS][N_COLS];
-  loadDesign("2017.txt");
+  loadDesign(pathDesign);
 
   path = new char[N_ROWS][N_COLS];
-  loadPath("01.txt");
+  loadPath(pathPath);
 
 
   TILE_SIZE = img_squareCircle.width;
