@@ -20,6 +20,8 @@ boolean debug = false;
 
 boolean save = false;
 
+boolean doPage = false;
+
 
 void setup() {
   size(1066, 1486);
@@ -34,6 +36,7 @@ void setup() {
 	--path PATH_FILENAME		Choose a predefined path file
 	--debug				See the design overlaid to the grid
 	--save				Save the resulting image
+	--page				Generate the whole page to be printed
 
   */
   if(args.length!=0){
@@ -45,6 +48,10 @@ void setup() {
 
 	if(argExists("--save")){
 		save = true;
+	}
+
+	if(argExists("--page")){
+		doPage = true;
 	}
 
 	int argDesign = argIndex("--design");
