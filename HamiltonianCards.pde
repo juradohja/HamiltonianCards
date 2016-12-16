@@ -15,7 +15,7 @@ char[][] path;
 
 boolean debug = false;
 
-boolean save = true;
+boolean save = false;
 
 
 void setup() {
@@ -29,6 +29,9 @@ void setup() {
 
   texture1 = loadImage("img/texture_example_01.png");
   texture2 = loadImage("img/texture_example_02.png");
+
+
+  generatePath(10, 10);
 
 
   design = new int[N_ROWS][N_COLS];
@@ -147,7 +150,6 @@ void loadDesign(String filename) {
     //    println();
   }
 
-  generatePath(10, 10);
 }
 
 void loadPath(String filename) {
