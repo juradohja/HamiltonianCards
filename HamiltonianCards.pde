@@ -13,14 +13,64 @@ int [][] design;
 char[][] path;
 
 
+String pathDesign;
+String pathPath;
+
 boolean debug = false;
 
 boolean save = false;
+
+boolean doPage = false;
 
 
 void setup() {
   size(1066, 1486);
   background(255);
+
+  // CLI usage:
+  /*
+  	In processing path:
+	./processing-java --sketch=SKETCH_PATH --run 
+	Options:
+	--design DESIGN_FILENAME 	Choose the design file to process
+	--path PATH_FILENAME		Choose a predefined path file
+	--debug				See the design overlaid to the grid
+	--save				Save the resulting image
+	--page				Generate the whole page to be printed
+
+  */
+  if(args.length!=0){
+	println(args[0]);
+
+	if(argExists("--debug")){
+		debug = true;
+	}
+
+	if(argExists("--save")){
+		save = true;
+	}
+
+	if(argExists("--page")){
+		doPage = true;
+	}
+
+	int argDesign = argIndex("--design");
+	if(argDesign>=0){
+		pathDesign = args[argDesign+1];		
+	}
+	else{
+		pathDesign = "2017.txt";
+	}
+
+	int argPath = argIndex("--path");
+	if(argPath>=0){
+		pathPath = args[argPath+1];		
+	}
+	else{
+		pathPath = "01.txt";
+	}
+
+  }
 
 
   img_square = loadImage("img/square.png");
@@ -35,10 +85,10 @@ void setup() {
 
 
   design = new int[N_ROWS][N_COLS];
-  loadDesign("2017.txt");
+  loadDesign(pathDesign);
 
   path = new char[N_ROWS][N_COLS];
-  loadPath("01.txt");
+  loadPath(pathPath);
 
 
   TILE_SIZE = img_squareCircle.width;
@@ -128,6 +178,20 @@ void setup() {
     save(String.format("results/%04d%02d%02d%02d%02d%02d.png", year(), month(), day(), hour(), minute(), second()));
     exit();
   }
+}
+
+// Return the index of the argument in the list. -1 if it's not in the list
+int argIndex(String arg){
+	for(int i=0; i<args.length; i++){
+		if(arg.equals(args[i])){
+			return i;
+		}
+	}
+	return -1;
+}
+
+boolean argExists(String arg){
+	return argIndex(arg)>=0;
 }
 
 void rotateSquare(int degrees) {
@@ -241,7 +305,7 @@ void generatePath(int n, int m) {
             Cell currentNeighbor = neighbors.get(i);
             if (!vC[currentNeighbor.row][currentNeighbor.col-1] && !vC[currentNeighbor.row][currentNeighbor.col+1]) {
               neighbors.remove(i);
-              System.out.println("removed");
+//              System.out.println("removed");
               i--;
             }
           } 
