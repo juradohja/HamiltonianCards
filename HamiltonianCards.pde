@@ -7,6 +7,8 @@ PImage img_square, img_squareCircle, img_squareTriangle;
 PImage texture1, texture2;
 PImage img_page;
 
+import processing.pdf.*;
+
 int state_current, state_next;
 
 int [][] design;
@@ -26,7 +28,8 @@ boolean doPage = false;
 
 void setup() {
 //  size(1066, 1486);
-  size(1980, 1530);
+//  size(1980, 1530);
+  size(1980, 1530,PDF,"results/result.pdf"); //Print PDF at 41% scale
   background(255);
 
   // CLI usage:
@@ -74,13 +77,23 @@ void setup() {
 
   }
 
+  /*
+  if(save){
+  size(1980, 1530,PDF,"results/result.pdf");
+  }
+  else{
+  size(1980, 1530);
+  }
+  background(255);
+  */
+
 
   img_square = loadImage("img/square.png");
   img_squareTriangle = loadImage("img/square_triangle.png");
   img_squareCircle = loadImage("img/square_circle.png");
 
 
-  img_page = loadImage("img/page_template.png");
+  img_page = loadImage("img/page_template_270.png");
 
   texture1 = loadImage("img/texture_example_01.png");
   texture2 = loadImage("img/texture_example_02.png");
@@ -176,10 +189,11 @@ void setup() {
 
         fill( state_current==1 ? 0 : 255);
         noStroke();
+	int offset = 2;
         if (state_current == 1) {
-          image(texture1, 0, 0,SQ_SIZE,SQ_SIZE);
+          image(texture1, offset, offset,SQ_SIZE-2*offset,SQ_SIZE-2*offset);
         } else {
-          image(texture2, 0, 0,SQ_SIZE,SQ_SIZE);
+          image(texture2, offset, offset,SQ_SIZE-2*offset,SQ_SIZE-2*offset);
         }
         //        rect(0,0,80,80);
       }
@@ -193,9 +207,14 @@ void setup() {
 
 
   if (save) {
-    save(String.format("results/%04d%02d%02d%02d%02d%02d.png", year(), month(), day(), hour(), minute(), second()));
-    exit();
+    save(filename("png"));
   }
+
+    exit();
+}
+
+String filename(String ext){
+	return String.format("results/%04d%02d%02d%02d%02d%02d.%s", year(), month(), day(), hour(), minute(), second(),ext);
 }
 
 // Return the index of the argument in the list. -1 if it's not in the list
