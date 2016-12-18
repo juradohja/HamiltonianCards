@@ -15,64 +15,14 @@ int [][] design;
 char[][] path;
 
 
-String pathDesign;
-String pathPath;
-
 boolean debug = false;
 
 boolean save = false;
-
-boolean doPage = false;
 
 
 void setup() {
   size(1066, 1486);
   background(255);
-
-  // CLI usage:
-  /*
-  	In processing path:
-	./processing-java --sketch=SKETCH_PATH --run 
-	Options:
-	--design DESIGN_FILENAME 	Choose the design file to process
-	--path PATH_FILENAME		Choose a predefined path file
-	--debug				See the design overlaid to the grid
-	--save				Save the resulting image
-	--page				Generate the whole page to be printed
-
-  */
-  if(args.length!=0){
-	println(args[0]);
-
-	if(argExists("--debug")){
-		debug = true;
-	}
-
-	if(argExists("--save")){
-		save = true;
-	}
-
-	if(argExists("--page")){
-		doPage = true;
-	}
-
-	int argDesign = argIndex("--design");
-	if(argDesign>=0){
-		pathDesign = args[argDesign+1];		
-	}
-	else{
-		pathDesign = "2017.txt";
-	}
-
-	int argPath = argIndex("--path");
-	if(argPath>=0){
-		pathPath = args[argPath+1];		
-	}
-	else{
-		pathPath = "01.txt";
-	}
-
-  }
 
 
   img_square = loadImage("img/square.png");
@@ -83,14 +33,11 @@ void setup() {
   texture2 = loadImage("img/texture_example_02.png");
 
 
-  generatePath(10, 10);
-
-
   design = new int[N_ROWS][N_COLS];
-  loadDesign(pathDesign);
+  loadDesign("2017.txt");
 
   path = new char[N_ROWS][N_COLS];
-  loadPath(pathPath);
+  loadPath("01.txt");
 
 
   TILE_SIZE = img_squareCircle.width;
@@ -182,20 +129,6 @@ void setup() {
   }
 }
 
-// Return the index of the argument in the list. -1 if it's not in the list
-int argIndex(String arg){
-	for(int i=0; i<args.length; i++){
-		if(arg.equals(args[i])){
-			return i;
-		}
-	}
-	return -1;
-}
-
-boolean argExists(String arg){
-	return argIndex(arg)>=0;
-}
-
 void rotateSquare(int degrees) {
   translate(SQ_SIZE/2, SQ_SIZE/2);
   rotate(radians(degrees));
@@ -215,16 +148,17 @@ void loadDesign(String filename) {
     }
     //    println();
   }
-  
- //TEST
-  char[][] hG = generatePath(10, 10);
-  for (int i=0; i<10; i++) {
-    for (int j=0; j<10; j++) { 
+
+  //TEST
+  int mrows = 15;
+  int ncols = 15;
+  char[][] hG = generatePath(ncols, mrows);
+  for (int i=0; i<mrows; i++) {
+    for (int j=0; j<ncols; j++) { 
       System.out.print(hG[i][j]+" ");
     }
     System.out.println("");
   }
-
 }
 
 void loadPath(String filename) {
@@ -331,17 +265,17 @@ char[][] generatePath(int n, int m) {  // By José Alberto Jurado
         hP.addLast(currentCell);
       }
       successfulPath = true;
-    /*  for (int i=0; i<m; i++) {
+      for (int i=0; i<m; i++) {
         for (int j=0; j<n; j++) { 
           if (pT[i][j] == 0) {
             pT[i][j] = m*n; 
             hP.addLast(new Cell(i, j));
-          };
-          System.out.print(pT[i][j]+" ");
+          }
+//          System.out.print(pT[i][j]+" ");
         }
-        System.out.println("");
+//        System.out.println("");
       }
-      for (int i=0; i<hP.size(); i++) {
+/*      for (int i=0; i<hP.size(); i++) {
         System.out.println("["+hP.get(i).row+","+hP.get(i).col+"]");
       }
 */
@@ -454,8 +388,7 @@ char[][] generatePath(int n, int m) {  // By José Alberto Jurado
           hG[nextCell.row][nextCell.col] = 'E';
         }
       }
-/*
-      for (int i=0; i<m; i++) {
+/*      for (int i=0; i<m; i++) {
         for (int j=0; j<n; j++) { 
           System.out.print(pT[i][j]+""+hG[i][j]+" ");
         }
