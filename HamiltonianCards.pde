@@ -23,7 +23,7 @@ boolean debug = false;
 
 boolean save = false;
 
-boolean doPage = false;
+boolean doPage = true;
 
 
 void setup() {
