@@ -1,7 +1,7 @@
 import java.util.*;
 
-int N_ROWS = 14;
-int N_COLS = 10;
+int N_ROWS = 7;
+int N_COLS = 35;
 
 int TILE_SIZE, SQ_SIZE;
 
@@ -32,8 +32,8 @@ boolean doGeneratePath = true;
 
 void setup() {
 //  size(1066, 1486);
-//  size(1980, 1530);
-  size(1980, 1530,PDF,"results/result.pdf"); //Print PDF at 41% scale
+  size(4000, 1530);
+//  size(1980, 1530,PDF,"results/result.pdf"); //Print PDF at 41% scale
   background(255);
 
   // CLI usage:
