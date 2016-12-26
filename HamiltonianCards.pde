@@ -1,9 +1,11 @@
-int N_ROWS = 14;
-int N_COLS = 10;
+import java.util.*;
+
+int N_ROWS = 7;
+int N_COLS = 27;
 
 int TILE_SIZE, SQ_SIZE;
 
-PImage img_square, img_squareCircle, img_squareTriangle;
+PImage img_square, img_squareCircle, img_squareTriangle, img_squareStart;
 PImage texture1, texture2;
 PImage img_page;
 
@@ -25,11 +27,13 @@ boolean save = false;
 
 boolean doPage = false;
 
+boolean doGeneratePath = true;
+
 
 void setup() {
 //  size(1066, 1486);
-//  size(1980, 1530);
-  size(1980, 1530,PDF,"results/result.pdf"); //Print PDF at 41% scale
+  size(4000, 1530);
+//  size(1980, 1530,PDF,"results/result.pdf"); //Print PDF at 41% scale
   background(255);
 
   // CLI usage:
@@ -68,10 +72,26 @@ void setup() {
     int argPath = argIndex("--path");
     if(argPath>=0){
         pathPath = args[argPath+1];        
+	doGeneratePath = false;
     }
     else{
         pathPath = "01.txt";
     }
+
+
+  //TEST
+  /*
+  int mrows = 14;
+  int ncols = 10;
+  char[][] hG = generatePath(ncols, mrows);
+  for (int i=0; i<mrows; i++) {
+    for (int j=0; j<ncols; j++) { 
+      System.out.print(hG[i][j]+" ");
+    }
+    System.out.println("");
+  }
+  */
+
 
 
   /*
@@ -88,6 +108,7 @@ void setup() {
   img_square = loadImage("img/square.png");
   img_squareTriangle = loadImage("img/square_triangle.png");
   img_squareCircle = loadImage("img/square_circle.png");
+  img_squareStart = loadImage("img/square_start.png");
 
 
   img_page = loadImage("img/page_template_270.png");
@@ -96,14 +117,20 @@ void setup() {
   texture2 = loadImage("img/texture_example_02.png");
 
 
-  generatePath(10, 10);
 
 
   design = new int[N_ROWS][N_COLS];
   loadDesign(pathDesign);
 
-  path = new char[N_ROWS][N_COLS];
-  loadPath(pathPath);
+  if(doGeneratePath){
+    path = generatePath(N_COLS,N_ROWS);
+  }
+  else{
+    path = new char[N_ROWS][N_COLS];
+    loadPath(pathPath);
+  }
+  
+
 
 
   TILE_SIZE = img_squareCircle.width;
@@ -134,6 +161,8 @@ void setup() {
 
 //  scale(0.5);
 
+  boolean isStart;
+
   for (int r=0; r<N_ROWS; r++) {
     x = 0;
     for (int c=0; c<N_COLS; c++) {
@@ -143,6 +172,14 @@ void setup() {
 
       state_current = design[r][c];
       direction = path[r][c];
+
+      if(direction>'U'){ // if direction char is lowercase
+     	isStart = true; 
+	direction -= 32; // Make it uppercase
+      }
+      else{
+	isStart = false;
+      }
 
       pushMatrix();
       switch(direction) {
@@ -178,6 +215,11 @@ void setup() {
       }
 
       popMatrix();
+
+
+      if(isStart){
+	image(img_squareStart,0,0);
+      }
 
 
       if (debug) {
@@ -266,13 +308,14 @@ void loadPath(String filename) {
   }
 }
 
-void generatePath(int n, int m) {
+char[][] generatePath(int n, int m) {  // By José Alberto Jurado https://github.com/juradohja
   boolean successfulPath = false;
+  char[][] hG = new char[m][n]; // Hamiltonian Grid
   while (!successfulPath) {
     try {
-      char[][] hP = new char[m][n]; // Hamiltonian Path
       boolean[][] vC = new boolean[m][n]; // visited cells
-      int[][] pT = new int[m][n];
+      int[][] pT = new int[m][n]; // path travelled
+      LinkedList<Cell> hP = new LinkedList<Cell>();
       for (int i=0; i<m; i++) {
         for (int j=0; j<n; j++) {
           vC[i][j] = false; // declares every cell in the grid as non-visited
@@ -301,11 +344,12 @@ void generatePath(int n, int m) {
         pT[m-1][n-1] = 1;
         break;
       }
+      hP.addLast(currentCell);
       int steps = 1;
       while (steps < ((m*n)-1)) {
         ArrayList<Cell> neighbors = new ArrayList<Cell>();
         for (int i = 0; i<4; i++) {
-          switch(i) { // searches all neighbors
+          switch(i) { // searches all non-visited neighbors
           case 0:
             if (currentCell.row-1>=0) {
               if (!vC[currentCell.row-1][currentCell.col]) {
@@ -336,35 +380,159 @@ void generatePath(int n, int m) {
             break;
           }
         }
-        for (int i = 0; i<neighbors.size(); i++) {
+        for (int i = 0; i<neighbors.size(); i++) { // removes neighbors that don't meet enough criteria
           try {
             Cell currentNeighbor = neighbors.get(i);
             if (!vC[currentNeighbor.row][currentNeighbor.col-1] && !vC[currentNeighbor.row][currentNeighbor.col+1]) {
               neighbors.remove(i);
-//              System.out.println("removed");
               i--;
             }
           } 
           catch(ArrayIndexOutOfBoundsException ex) {
           }
         }
-        currentCell = neighbors.get(int(random(neighbors.size())));
+        currentCell = neighbors.get(int(random(neighbors.size()))); // chooses randomly a neighbor, travels it and starts again
         vC[currentCell.row][currentCell.col] = true;
         steps++;
         pT[currentCell.row][currentCell.col] = steps;
+        hP.addLast(currentCell);
       }
       successfulPath = true;
-
       for (int i=0; i<m; i++) {
-        for (int j=0; j<m; j++) { 
+        for (int j=0; j<n; j++) { 
+          if (pT[i][j] == 0) {
+            pT[i][j] = m*n; 
+            hP.addLast(new Cell(i, j));
+          }
+//          System.out.print(pT[i][j]+" ");
+        }
+//        System.out.println("");
+      }
+/*      for (int i=0; i<hP.size(); i++) {
+        System.out.println("["+hP.get(i).row+","+hP.get(i).col+"]");
+      }
+*/
+      // relocate start and end
+      int relocateStartAndEnd = 0;
+      while (relocateStartAndEnd < 1000) { // CHANGE RANDOMNESS more iterations -> greater randomness
+        int startOrEnd = int(random(2)); // choose start or end
+        switch(startOrEnd) {
+        case 0:
+          currentCell = hP.get(0);
+          break;
+        case 1:
+          currentCell = hP.get(hP.size()-1);
+          break;
+        }
+        ArrayList<Cell> neighbors = new ArrayList<Cell>();
+        for (int i = 0; i<4; i++) { // locates all non-connected neighbors
+          try {
+            switch(i) {
+            case 0:
+              if (abs(pT[currentCell.row][currentCell.col]-pT[currentCell.row-1][currentCell.col]) > 1) {
+                neighbors.add(new Cell(currentCell.row-1, currentCell.col));
+              }
+              break;
+            case 1:
+              if (abs(pT[currentCell.row][currentCell.col]-pT[currentCell.row][currentCell.col+1]) > 1) {
+                neighbors.add(new Cell(currentCell.row, currentCell.col+1));
+              }
+              break;
+            case 2:
+              if (abs(pT[currentCell.row][currentCell.col]-pT[currentCell.row+1][currentCell.col]) > 1) {
+                neighbors.add(new Cell(currentCell.row+1, currentCell.col));
+              }
+              break;
+            case 3:
+              if (abs(pT[currentCell.row][currentCell.col]-pT[currentCell.row][currentCell.col-1]) > 1) {
+                neighbors.add(new Cell(currentCell.row, currentCell.col-1));
+              }
+              break;
+            }
+          } 
+          catch(ArrayIndexOutOfBoundsException ex) {
+          }
+        }
+        Cell chosenNeighbor = neighbors.get(int(random(neighbors.size()))); // choose a neighbor
+        int indexChosenNeighbor = pT[chosenNeighbor.row][chosenNeighbor.col]-1;
+        LinkedList<Cell> tempHP = new LinkedList<Cell>();
+        if (indexChosenNeighbor > pT[currentCell.row][currentCell.col]) { // change path
+          for (int i = indexChosenNeighbor-1; i>=0; i--) {
+            tempHP.add(hP.get(i));
+          }
+          for (int i = indexChosenNeighbor; i<hP.size(); i++) {
+            tempHP.add(hP.get(i));
+          }
+        } else {
+          for (int i = 0; i<=indexChosenNeighbor; i++) {
+            tempHP.add(hP.get(i));
+          }
+          for (int i = hP.size()-1; i>indexChosenNeighbor; i--) {
+            tempHP.add(hP.get(i));
+          }
+        }
+        hP = tempHP;
+        for (int i = 0; i<hP.size(); i++) {
+          pT[hP.get(i).row][hP.get(i).col] = i+1;
+        }
+        relocateStartAndEnd++;
+      }
+/*
+      for (int i=0; i<m; i++) {
+        for (int j=0; j<n; j++) { 
           System.out.print(pT[i][j]+" ");
         }
         System.out.println("");
       }
+*/
+      for (int i = 0; i<hP.size()-1; i++) {
+        Cell thisCell = hP.get(i);
+        Cell nextCell = hP.get(i+1);
+        int row = nextCell.row - thisCell.row;
+        int col = nextCell.col - thisCell.col;
+        if (i==0) {
+          if (row == 1) {
+            hG[thisCell.row][thisCell.col] = 'd';
+          }
+          if (row == -1) {
+            hG[thisCell.row][thisCell.col] = 'u';
+          }
+          if (col == 1) {
+            hG[thisCell.row][thisCell.col] = 'r';
+          }
+          if (col == -1) {
+            hG[thisCell.row][thisCell.col] = 'l';
+          }
+        } else {
+          if (row == 1) {
+            hG[thisCell.row][thisCell.col] = 'D';
+          }
+          if (row == -1) {
+            hG[thisCell.row][thisCell.col] = 'U';
+          }
+          if (col == 1) {
+            hG[thisCell.row][thisCell.col] = 'R';
+          }
+          if (col == -1) {
+            hG[thisCell.row][thisCell.col] = 'L';
+          }
+        }
+        if (i==hP.size()-2) {
+          hG[nextCell.row][nextCell.col] = 'E';
+        }
+      }
+/*      for (int i=0; i<m; i++) {
+        for (int j=0; j<n; j++) { 
+          System.out.print(pT[i][j]+""+hG[i][j]+" ");
+        }
+        System.out.println("");
+      }
+*/
     } 
     catch (IndexOutOfBoundsException e) {
     }
   }
+  return hG;
 }
 
 void draw(){
