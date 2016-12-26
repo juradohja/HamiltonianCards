@@ -1,3 +1,5 @@
+import java.util.*;
+
 int N_ROWS = 14;
 int N_COLS = 10;
 
@@ -74,6 +76,19 @@ void setup() {
     }
 
 
+  //TEST
+  int mrows = 15;
+  int ncols = 15;
+  char[][] hG = generatePath(ncols, mrows);
+  for (int i=0; i<mrows; i++) {
+    for (int j=0; j<ncols; j++) { 
+      System.out.print(hG[i][j]+" ");
+    }
+    System.out.println("");
+  }
+
+
+
   /*
   if(save){
   size(1980, 1530,PDF,"results/result.pdf");
@@ -96,7 +111,6 @@ void setup() {
   texture2 = loadImage("img/texture_example_02.png");
 
 
-  generatePath(10, 10);
 
 
   design = new int[N_ROWS][N_COLS];
