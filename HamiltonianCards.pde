@@ -44,8 +44,6 @@ void setup() {
 	--page				Generate the whole page to be printed (with instructions)
 
   */
-  if(args.length!=0){
-    println(args[0]);
 
     if(argExists("--debug")){
         debug = true;
@@ -60,6 +58,7 @@ void setup() {
     }
 
     int argDesign = argIndex("--design");
+    println(argDesign);
     if(argDesign>=0){
         pathDesign = args[argDesign+1];        
     }
@@ -75,7 +74,6 @@ void setup() {
         pathPath = "01.txt";
     }
 
-  }
 
   /*
   if(save){
@@ -219,10 +217,12 @@ String filename(String ext){
 
 // Return the index of the argument in the list. -1 if it's not in the list
 int argIndex(String arg){
+	if(args!=null){
 	for(int i=0; i<args.length; i++){
 		if(arg.equals(args[i])){
 			return i;
 		}
+	}
 	}
 	return -1;
 }
