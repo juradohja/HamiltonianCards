@@ -23,7 +23,7 @@ boolean debug = false;
 
 boolean save = false;
 
-boolean doPage = true;
+boolean doPage = false;
 
 
 void setup() {
@@ -41,7 +41,7 @@ void setup() {
 	--path PATH_FILENAME		Choose a predefined path file
 	--debug				See the design overlaid to the grid
 	--save				Save the resulting image
-	--page				Generate the whole page to be printed
+	--page				Generate the whole page to be printed (with instructions)
 
   */
   if(args.length!=0){
