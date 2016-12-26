@@ -58,7 +58,6 @@ void setup() {
     }
 
     int argDesign = argIndex("--design");
-    println(argDesign);
     if(argDesign>=0){
         pathDesign = args[argDesign+1];        
     }
