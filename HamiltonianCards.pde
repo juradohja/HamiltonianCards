@@ -1,7 +1,7 @@
 import java.util.*;
 
 int N_ROWS = 7;
-int N_COLS = 35;
+int N_COLS = 27;
 
 int TILE_SIZE, SQ_SIZE;
 
