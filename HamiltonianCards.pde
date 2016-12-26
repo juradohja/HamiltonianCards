@@ -5,7 +5,7 @@ int N_COLS = 10;
 
 int TILE_SIZE, SQ_SIZE;
 
-PImage img_square, img_squareCircle, img_squareTriangle;
+PImage img_square, img_squareCircle, img_squareTriangle, img_squareStart;
 PImage texture1, texture2;
 PImage img_page;
 
@@ -26,6 +26,8 @@ boolean debug = false;
 boolean save = false;
 
 boolean doPage = false;
+
+boolean doGeneratePath = true;
 
 
 void setup() {
@@ -70,6 +72,7 @@ void setup() {
     int argPath = argIndex("--path");
     if(argPath>=0){
         pathPath = args[argPath+1];        
+	doGeneratePath = false;
     }
     else{
         pathPath = "01.txt";
@@ -77,8 +80,9 @@ void setup() {
 
 
   //TEST
-  int mrows = 15;
-  int ncols = 15;
+  /*
+  int mrows = 14;
+  int ncols = 10;
   char[][] hG = generatePath(ncols, mrows);
   for (int i=0; i<mrows; i++) {
     for (int j=0; j<ncols; j++) { 
@@ -86,6 +90,7 @@ void setup() {
     }
     System.out.println("");
   }
+  */
 
 
 
@@ -103,6 +108,7 @@ void setup() {
   img_square = loadImage("img/square.png");
   img_squareTriangle = loadImage("img/square_triangle.png");
   img_squareCircle = loadImage("img/square_circle.png");
+  img_squareStart = loadImage("img/square_start.png");
 
 
   img_page = loadImage("img/page_template_270.png");
@@ -116,8 +122,15 @@ void setup() {
   design = new int[N_ROWS][N_COLS];
   loadDesign(pathDesign);
 
-  path = new char[N_ROWS][N_COLS];
-  loadPath(pathPath);
+  if(doGeneratePath){
+    path = generatePath(N_COLS,N_ROWS);
+  }
+  else{
+    path = new char[N_ROWS][N_COLS];
+    loadPath(pathPath);
+  }
+  
+
 
 
   TILE_SIZE = img_squareCircle.width;
@@ -148,6 +161,8 @@ void setup() {
 
 //  scale(0.5);
 
+  boolean isStart;
+
   for (int r=0; r<N_ROWS; r++) {
     x = 0;
     for (int c=0; c<N_COLS; c++) {
@@ -157,6 +172,14 @@ void setup() {
 
       state_current = design[r][c];
       direction = path[r][c];
+
+      if(direction>'U'){ // if direction char is lowercase
+     	isStart = true; 
+	direction -= 32; // Make it uppercase
+      }
+      else{
+	isStart = false;
+      }
 
       pushMatrix();
       switch(direction) {
@@ -192,6 +215,11 @@ void setup() {
       }
 
       popMatrix();
+
+
+      if(isStart){
+	image(img_squareStart,0,0);
+      }
 
 
       if (debug) {
