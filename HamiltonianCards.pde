@@ -9,6 +9,8 @@ PImage img_square, img_squareCircle, img_squareTriangle, img_squareStart;
 PImage texture1, texture2;
 PImage img_page;
 
+PImage img_design;
+
 import processing.pdf.*;
 
 int state_current, state_next;
@@ -18,8 +20,10 @@ int [][] design;
 char[][] path;
 
 
+String prefixDesigns = "designs/";
 String pathDesign;
 String pathPath;
+String pathImage;
 
 boolean debug = false;
 
@@ -29,10 +33,13 @@ boolean doPage = false;
 
 boolean doGeneratePath = true;
 
+boolean isDesignImage = false;
+
+
 
 void setup() {
 //  size(1066, 1486);
-  size(4000, 1530);
+  size(4000, 4000);
 //  size(1980, 1530,PDF,"results/result.pdf"); //Print PDF at 41% scale
   background(255);
 
@@ -46,6 +53,7 @@ void setup() {
 	--debug				See the design overlaid to the grid
 	--save				Save the resulting image
 	--page				Generate the whole page to be printed (with instructions)
+	--image IMAGE_FILENAME		Use an image as a design
 
   */
 
@@ -77,6 +85,13 @@ void setup() {
     else{
         pathPath = "01.txt";
     }
+
+    int argImage = argIndex("--image");
+    if(argImage>=0){
+	pathImage = args[argImage+1];
+	isDesignImage = true;
+    }
+
 
 
   //TEST
@@ -119,8 +134,29 @@ void setup() {
 
 
 
-  design = new int[N_ROWS][N_COLS];
-  loadDesign(pathDesign);
+  if(isDesignImage){
+	img_design = loadImage(prefixDesigns+pathImage);
+	N_COLS = img_design.width;
+	N_ROWS = img_design.height;
+	design = new int[N_ROWS][N_COLS];
+	img_design.loadPixels();
+	boolean pixelstate;
+	for(int i=0; i<N_ROWS; i++){
+		for(int j=0; j<N_COLS; j++){
+			pixelstate = (brightness(img_design.pixels[i*N_COLS + j])>140);
+			design[i][j] =  pixelstate ? 1 : 2;	
+			print(pixelstate?".":"x");
+		}
+		println();
+	}
+	img_design.updatePixels();
+
+  }
+  else{
+	design = new int[N_ROWS][N_COLS];
+  	loadDesign(pathDesign);
+  }
+
 
   if(doGeneratePath){
     path = generatePath(N_COLS,N_ROWS);
@@ -279,7 +315,7 @@ void rotateSquare(int degrees) {
 }
 
 void loadDesign(String filename) {
-  String [] lines = loadStrings("designs/"+filename);
+  String [] lines = loadStrings(prefixDesigns+filename);
 
   for (int i=0; i<lines.length; i++) {
     String [] chars = split(lines[i], "\t");
