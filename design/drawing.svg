@@ -28,9 +28,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8"
-     inkscape:cx="313.91624"
-     inkscape:cy="760.82948"
+     inkscape:zoom="1.979899"
+     inkscape:cx="1333.9678"
+     inkscape:cy="1259.295"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -933,7 +933,7 @@
          x="53.538074"
          y="931.78528"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.75px;font-family:Tulia;-inkscape-font-specification:Tulia"
-         id="tspan6421"></tspan><tspan
+         id="tspan6421" /><tspan
          sodipodi:role="line"
          x="53.538074"
          y="955.22278"
@@ -1837,6 +1837,67 @@
          id="path4785-7"
          d="m 328.29958,524.93631 c 0.16835,0.16836 0.31133,0.36669 0.50507,0.50508 0.10831,0.0774 0.26468,0.0578 0.37881,0.12627 0.10208,0.0612 0.15958,0.17817 0.25254,0.25253 0.1185,0.0948 0.2603,0.15774 0.3788,0.25254 0.2597,0.20776 0.49592,0.56134 0.75762,0.75762 0.0753,0.0565 0.17423,0.0741 0.25254,0.12627 0.0495,0.033 0.0842,0.0842 0.12627,0.12626 0.16835,0.16836 0.33671,0.33672 0.50507,0.50508 0.0421,0.0421 0.0842,0.0842 0.12627,0.12627 0.0421,0.0421 0.0996,0.073 0.12627,0.12627 0.0188,0.0376 -0.0188,0.0886 0,0.12627 0.0758,0.15152 0.30305,0.22728 0.37881,0.37881 0.0188,0.0376 -0.0188,0.0886 0,0.12626 0.0266,0.0532 0.0996,0.073 0.12627,0.12627 0.0188,0.0376 -0.0298,0.0965 0,0.12627 0.0298,0.0298 0.0965,-0.0298 0.12627,0 0.0595,0.0595 -0.0595,0.19302 0,0.25254 0.0298,0.0298 0.0965,-0.0298 0.12626,0 0.0298,0.0298 -0.0298,0.0965 0,0.12627 0.0298,0.0298 0.0965,-0.0298 0.12627,0 0.0298,0.0298 -0.0298,0.0965 0,0.12627 0.0298,0.0298 0.0965,-0.0298 0.12627,0 0.0298,0.0298 -0.0298,0.0965 0,0.12627 0.0298,0.0298 0.0965,-0.0298 0.12627,0 0.0298,0.0298 -0.0188,0.0886 0,0.12627 0.0266,0.0532 0.0996,0.073 0.12627,0.12627 0.0188,0.0376 -0.0298,0.0965 0,0.12626 0.0298,0.0298 0.0965,-0.0298 0.12627,0 0.0298,0.0298 -0.0298,0.0965 0,0.12627 0.0298,0.0298 0.0965,-0.0298 0.12627,0 0.0298,0.0298 -0.0298,0.0965 0,0.12627 0.0298,0.0298 0.0965,-0.0298 0.12627,0 0.0298,0.0298 -0.0298,0.0965 0,0.12627 0.0298,0.0298 0.0965,-0.0298 0.12627,0 0.16836,0.16836 -0.21045,0.12627 0.12627,0.12627"
          style="fill:none;fill-rule:evenodd;stroke:#b3b3b3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    </g>
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.90234178;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 1409.7103,-191.86742 0,39.09766 39.0976,0 0,-13.22847 a 6.3732392,6.3732392 0 0 0 0.7561,0.0529 6.3732392,6.3732392 0 0 0 6.3728,-6.37367 6.3732392,6.3732392 0 0 0 -6.3728,-6.37279 6.3732392,6.3732392 0 0 0 -0.7561,0.0502 l 0,-13.22583 -39.0976,0 z"
+       id="rect4136-3-3-5-8-7"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/sejo/Dropbox/Escenaconsejo/Processing/sketchbook/git/HamiltonianCards/data/img/square_circle_small.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.90234178;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 1551.6525,-192.41905 0,39.09766 39.0977,0 0,-13.16326 7.2557,-6.38513 -7.2557,-6.38601 0,-13.16326 -39.0977,0 z"
+       id="rect4136-3-3-5-0-7-3"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/sejo/Dropbox/Escenaconsejo/Processing/sketchbook/git/HamiltonianCards/data/img/square_triangle_small.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.90234727;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect4136-3-3-5-0-6-6"
+       width="39.097652"
+       height="39.097652"
+       x="1510.4081"
+       y="226.61728"
+       transform="scale(1,-1)"
+       inkscape:export-filename="/home/sejo/Dropbox/Escenaconsejo/Processing/sketchbook/git/HamiltonianCards/data/img/square_small.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <g
+       id="g6393"
+       inkscape:export-filename="/home/sejo/Dropbox/Escenaconsejo/Processing/sketchbook/git/HamiltonianCards/data/img/square_start.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <text
+         sodipodi:linespacing="125%"
+         id="text6425-0-3"
+         y="-178.05284"
+         x="1302.6774"
+         style="font-style:normal;font-weight:normal;font-size:56.16759109px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         xml:space="preserve"><tspan
+           id="tspan6429-5-6"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.75px;font-family:Tulia;-inkscape-font-specification:Tulia;text-align:center;text-anchor:middle"
+           y="-178.05284"
+           x="1304.545"
+           sodipodi:role="line">Start </tspan><tspan
+           id="tspan9702"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.75px;font-family:Tulia;-inkscape-font-specification:Tulia;text-align:center;text-anchor:middle"
+           y="-154.61534"
+           x="1302.6774"
+           sodipodi:role="line">HERE!</tspan></text>
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/sejo/Dropbox/Escenaconsejo/Processing/sketchbook/git/HamiltonianCards/data/img/square.png"
+         transform="scale(1,-1)"
+         y="129.62401"
+         x="1259.2628"
+         height="86.657661"
+         width="86.657661"
+         id="rect4136-3-3-5-0-6-5"
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
     </g>
   </g>
   <g

@@ -1,12 +1,17 @@
 import java.util.*;
 
-int N_ROWS = 14;
-int N_COLS = 10;
+int N_ROWS = 7;
+int N_COLS = 27;
 
 int TILE_SIZE, SQ_SIZE;
 
-PImage img_square, img_squareCircle, img_squareTriangle;
+PImage img_square, img_squareCircle, img_squareTriangle, img_squareStart;
 PImage texture1, texture2;
+PImage img_page;
+
+PImage img_design;
+
+import processing.pdf.*;
 
 int state_current, state_next;
 
@@ -15,34 +20,163 @@ int [][] design;
 char[][] path;
 
 
+String prefixDesigns = "designs/";
+String pathDesign;
+String pathPath;
+String pathImage;
+
 boolean debug = false;
 
 boolean save = false;
 
+boolean doPage = false;
+
+boolean doGeneratePath = true;
+
+boolean isDesignImage = false;
+
+
 
 void setup() {
-  size(1066, 1486);
+//  size(1066, 1486);
+  size(4000, 4000);
+//  size(1980, 1530,PDF,"results/result.pdf"); //Print PDF at 41% scale
   background(255);
+
+  // CLI usage:
+  /*
+  	In processing path:
+	./processing-java --sketch=SKETCH_PATH --run 
+	Options:
+	--design DESIGN_FILENAME 	Choose the design file to process
+	--path PATH_FILENAME		Choose a predefined path file
+	--debug				See the design overlaid to the grid
+	--save				Save the resulting image
+	--page				Generate the whole page to be printed (with instructions)
+	--image IMAGE_FILENAME		Use an image as a design
+
+  */
+
+    if(argExists("--debug")){
+        debug = true;
+    }
+
+    if(argExists("--save")){
+        save = true;
+    }
+
+    if(argExists("--page")){
+        doPage = true;
+    }
+
+    int argDesign = argIndex("--design");
+    if(argDesign>=0){
+        pathDesign = args[argDesign+1];        
+    }
+    else{
+        pathDesign = "2017.txt";
+    }
+
+    int argPath = argIndex("--path");
+    if(argPath>=0){
+        pathPath = args[argPath+1];        
+	doGeneratePath = false;
+    }
+    else{
+        pathPath = "01.txt";
+    }
+
+    int argImage = argIndex("--image");
+    if(argImage>=0){
+	pathImage = args[argImage+1];
+	isDesignImage = true;
+    }
+
+
+
+  //TEST
+  /*
+  int mrows = 14;
+  int ncols = 10;
+  char[][] hG = generatePath(ncols, mrows);
+  for (int i=0; i<mrows; i++) {
+    for (int j=0; j<ncols; j++) { 
+      System.out.print(hG[i][j]+" ");
+    }
+    System.out.println("");
+  }
+  */
+
+
+
+  /*
+  if(save){
+  size(1980, 1530,PDF,"results/result.pdf");
+  }
+  else{
+  size(1980, 1530);
+  }
+  background(255);
+  */
 
 
   img_square = loadImage("img/square.png");
   img_squareTriangle = loadImage("img/square_triangle.png");
   img_squareCircle = loadImage("img/square_circle.png");
+  img_squareStart = loadImage("img/square_start.png");
+
+
+  img_page = loadImage("img/page_template_270.png");
 
   texture1 = loadImage("img/texture_example_01.png");
   texture2 = loadImage("img/texture_example_02.png");
 
 
-  design = new int[N_ROWS][N_COLS];
-  loadDesign("2017.txt");
 
-  path = new char[N_ROWS][N_COLS];
-  loadPath("01.txt");
+
+  if(isDesignImage){
+	img_design = loadImage(prefixDesigns+pathImage);
+	N_COLS = img_design.width;
+	N_ROWS = img_design.height;
+	design = new int[N_ROWS][N_COLS];
+	img_design.loadPixels();
+	boolean pixelstate;
+	for(int i=0; i<N_ROWS; i++){
+		for(int j=0; j<N_COLS; j++){
+			pixelstate = (brightness(img_design.pixels[i*N_COLS + j])>140);
+			design[i][j] =  pixelstate ? 1 : 2;	
+			print(pixelstate?".":"x");
+		}
+		println();
+	}
+	img_design.updatePixels();
+
+  }
+  else{
+	design = new int[N_ROWS][N_COLS];
+  	loadDesign(pathDesign);
+  }
+
+
+  if(doGeneratePath){
+    path = generatePath(N_COLS,N_ROWS);
+  }
+  else{
+    path = new char[N_ROWS][N_COLS];
+    loadPath(pathPath);
+  }
+  
+
 
 
   TILE_SIZE = img_squareCircle.width;
   SQ_SIZE = img_square.width;
   println(String.format("Tile size: %d, Square size: %d", TILE_SIZE, SQ_SIZE));
+
+
+  if(doPage){
+	image(img_page,0,0,width,height);
+  }
 
   int x = 0;
   int y = 0;
@@ -53,7 +187,17 @@ void setup() {
   state_current = 1;
 
   //  translate(TILE_SIZE-SQ_SIZE,TILE_SIZE-SQ_SIZE);
-  translate(16, 16);
+  if(doPage){
+	translate(width/2+SQ_SIZE*0.9,SQ_SIZE*2);
+	scale(0.8);
+  }
+  else{
+  	translate(16, 16);
+  }
+
+//  scale(0.5);
+
+  boolean isStart;
 
   for (int r=0; r<N_ROWS; r++) {
     x = 0;
@@ -64,6 +208,14 @@ void setup() {
 
       state_current = design[r][c];
       direction = path[r][c];
+
+      if(direction>'U'){ // if direction char is lowercase
+     	isStart = true; 
+	direction -= 32; // Make it uppercase
+      }
+      else{
+	isStart = false;
+      }
 
       pushMatrix();
       switch(direction) {
@@ -101,16 +253,22 @@ void setup() {
       popMatrix();
 
 
+      if(isStart){
+	image(img_squareStart,0,0);
+      }
+
+
       if (debug) {
         //        translate(SQ_SIZE/2,SQ_SIZE/2);
         //  ellipse(0,0,70,70);
 
         fill( state_current==1 ? 0 : 255);
         noStroke();
+	int offset = 2;
         if (state_current == 1) {
-          image(texture1, 0, 0);
+          image(texture1, offset, offset,SQ_SIZE-2*offset,SQ_SIZE-2*offset);
         } else {
-          image(texture2, 0, 0);
+          image(texture2, offset, offset,SQ_SIZE-2*offset,SQ_SIZE-2*offset);
         }
         //        rect(0,0,80,80);
       }
@@ -124,9 +282,30 @@ void setup() {
 
 
   if (save) {
-    save(String.format("results/%04d%02d%02d%02d%02d%02d.png", year(), month(), day(), hour(), minute(), second()));
-    exit();
+    save(filename("png"));
   }
+
+    exit();
+}
+
+String filename(String ext){
+	return String.format("results/%04d%02d%02d%02d%02d%02d.%s", year(), month(), day(), hour(), minute(), second(),ext);
+}
+
+// Return the index of the argument in the list. -1 if it's not in the list
+int argIndex(String arg){
+	if(args!=null){
+	for(int i=0; i<args.length; i++){
+		if(arg.equals(args[i])){
+			return i;
+		}
+	}
+	}
+	return -1;
+}
+
+boolean argExists(String arg){
+	return argIndex(arg)>=0;
 }
 
 void rotateSquare(int degrees) {
@@ -136,7 +315,7 @@ void rotateSquare(int degrees) {
 }
 
 void loadDesign(String filename) {
-  String [] lines = loadStrings("designs/"+filename);
+  String [] lines = loadStrings(prefixDesigns+filename);
 
   for (int i=0; i<lines.length; i++) {
     String [] chars = split(lines[i], "\t");
@@ -175,7 +354,7 @@ void loadPath(String filename) {
   }
 }
 
-char[][] generatePath(int n, int m) {  // By José Alberto Jurado
+char[][] generatePath(int n, int m) {  // By José Alberto Jurado https://github.com/juradohja
   boolean successfulPath = false;
   char[][] hG = new char[m][n]; // Hamiltonian Grid
   while (!successfulPath) {
