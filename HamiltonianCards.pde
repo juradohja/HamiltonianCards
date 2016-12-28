@@ -159,7 +159,7 @@ void setup() {
 
 
   if(doGeneratePath){
-    path = generatePath(N_COLS,N_ROWS);
+    path = generatePath(N_COLS,N_ROWS,false,1000);
   }
   else{
     path = new char[N_ROWS][N_COLS];
@@ -354,7 +354,7 @@ void loadPath(String filename) {
   }
 }
 
-char[][] generatePath(int n, int m) {  // By José Alberto Jurado https://github.com/juradohja
+char[][] generatePath(int n, int m, boolean zigZag, int randomness) {  // By José Alberto Jurado https://github.com/juradohja
   boolean successfulPath = false;
   char[][] hG = new char[m][n]; // Hamiltonian Grid
   while (!successfulPath) {
@@ -362,6 +362,7 @@ char[][] generatePath(int n, int m) {  // By José Alberto Jurado https://github
       boolean[][] vC = new boolean[m][n]; // visited cells
       int[][] pT = new int[m][n]; // path travelled
       LinkedList<Cell> hP = new LinkedList<Cell>();
+      int startCorner = 0;
       for (int i=0; i<m; i++) {
         for (int j=0; j<n; j++) {
           vC[i][j] = false; // declares every cell in the grid as non-visited
@@ -377,90 +378,211 @@ char[][] generatePath(int n, int m) {  // By José Alberto Jurado https://github
         vC[0][n-1] = true;
         currentCell.col = n-1;
         pT[0][n-1] = 1;
+        startCorner = 1;
         break;
       case 2:
         vC[m-1][0] = true;
         currentCell.row = m-1;
         pT[m-1][0] = 1;
+        startCorner = 2;
         break;
       case 3:
         vC[m-1][n-1] = true;
         currentCell.row = m-1;
         currentCell.col = n-1;
         pT[m-1][n-1] = 1;
+        startCorner = 3;
         break;
       }
-      hP.addLast(currentCell);
-      int steps = 1;
-      while (steps < ((m*n)-1)) {
-        ArrayList<Cell> neighbors = new ArrayList<Cell>();
-        for (int i = 0; i<4; i++) {
-          switch(i) { // searches all non-visited neighbors
+      if (zigZag) {
+        int steps = 1;
+        while (steps <= ((m*n))) {
+//          System.out.println("m: "+m);
+//          System.out.println("n: "+n);
+          switch(startCorner) {
           case 0:
-            if (currentCell.row-1>=0) {
-              if (!vC[currentCell.row-1][currentCell.col]) {
-                neighbors.add(new Cell(currentCell.row-1, currentCell.col));
+            for (int i = 0; i<m; i++) {
+              if (i % 2 == 0) {
+                for (int j = 0; j<n; j++) {
+                  currentCell.row = i;
+                  currentCell.col = j;
+                  hP.addLast(new Cell(i, j));
+//                  System.out.print(" TEST ["+currentCell.row+","+currentCell.col+"]");
+//                  System.out.println(" TEST2 ["+hP.getLast().row+","+hP.getLast().col+"] "+hP.size());
+                  vC[i][j] = true;
+                  pT[i][j] = steps;
+                  steps++;
+                }
+              } else {
+                for (int j = n-1; j>=0; j--) {
+                  currentCell.row = i;
+                  currentCell.col = j;
+                  hP.addLast(new Cell(i, j));
+//                  System.out.print(" TEST ["+currentCell.row+","+currentCell.col+"]");
+//                  System.out.println(" TEST2 ["+hP.getLast().row+","+hP.getLast().col+"] "+hP.size());
+                  vC[i][j] = true;
+                  pT[i][j] = steps;
+                  steps++;
+                }
               }
             }
             break;
           case 1:
-            if (currentCell.col+1<n) {
-              if (!vC[currentCell.row][currentCell.col+1]) {
-                neighbors.add(new Cell(currentCell.row, currentCell.col+1));
+            for (int i = 0; i<m; i++) {
+              if (i % 2 == 1) {
+                for (int j = 0; j<n; j++) {
+                  currentCell.row = i;
+                  currentCell.col = j;
+                  hP.addLast(new Cell(i, j));
+//                  System.out.print(" TEST ["+currentCell.row+","+currentCell.col+"]");
+//                  System.out.println(" TEST2 ["+hP.getLast().row+","+hP.getLast().col+"] "+hP.size());
+                  vC[i][j] = true;
+                  pT[i][j] = steps;
+                  steps++;
+                }
+              } else {
+                for (int j = n-1; j>=0; j--) {
+                  currentCell.row = i;
+                  currentCell.col = j;
+                  hP.addLast(new Cell(i, j));
+//                  System.out.print(" TEST ["+currentCell.row+","+currentCell.col+"]");
+//                  System.out.println(" TEST2 ["+hP.getLast().row+","+hP.getLast().col+"] "+hP.size());
+                  vC[i][j] = true;
+                  pT[i][j] = steps;
+                  steps++;
+                }
               }
             }
             break;
           case 2:
-            if (currentCell.row+1<m) {
-              if (!vC[currentCell.row+1][currentCell.col]) {
-                neighbors.add(new Cell(currentCell.row+1, currentCell.col));
+            for (int i = m-1; i>=0; i--) {
+              if (i % 2 == 0) {
+                for (int j = 0; j<n; j++) {
+                  currentCell.row = i;
+                  currentCell.col = j;
+                  hP.addLast(new Cell(i, j));
+//                  System.out.print(" TEST ["+currentCell.row+","+currentCell.col+"]");
+//                  System.out.println(" TEST2 ["+hP.getLast().row+","+hP.getLast().col+"] "+hP.size());
+                  vC[i][j] = true;
+                  pT[i][j] = steps;
+                  steps++;
+                }
+              } else {
+                for (int j = n-1; j>=0; j--) {
+                  currentCell.row = i;
+                  currentCell.col = j;
+                  hP.addLast(new Cell(i, j));
+//                  System.out.print(" TEST ["+currentCell.row+","+currentCell.col+"]");
+//                  System.out.println(" TEST2 ["+hP.getLast().row+","+hP.getLast().col+"] "+hP.size());
+                  vC[i][j] = true;
+                  pT[i][j] = steps;
+                  steps++;
+                }
               }
             }
             break;
           case 3:
-            if (currentCell.col-1>=0) {
-              if (!vC[currentCell.row][currentCell.col-1]) {
-                neighbors.add(new Cell(currentCell.row, currentCell.col-1));
+            for (int i = m-1; i>=0; i--) {
+              if (i % 2 == 1) {
+                for (int j = 0; j<n; j++) {
+                  currentCell.row = i;
+                  currentCell.col = j;
+                  hP.addLast(new Cell(i, j));
+//                  System.out.print(" TEST ["+currentCell.row+","+currentCell.col+"]");
+//                  System.out.println(" TEST2 ["+hP.getLast().row+","+hP.getLast().col+"] "+hP.size());
+                  vC[i][j] = true;
+                  pT[i][j] = steps;
+                  steps++;
+                }
+              } else {
+                for (int j = n-1; j>=0; j--) {
+                  currentCell.row = i;
+                  currentCell.col = j;
+                  hP.addLast(new Cell(i, j));
+//                  System.out.print(" TEST ["+currentCell.row+","+currentCell.col+"]");
+//                  System.out.println(" TEST2 ["+hP.getLast().row+","+hP.getLast().col+"] "+hP.size());
+                  vC[i][j] = true;
+                  pT[i][j] = steps;
+                  steps++;
+                }
               }
             }
             break;
           }
         }
-        for (int i = 0; i<neighbors.size(); i++) { // removes neighbors that don't meet enough criteria
-          try {
-            Cell currentNeighbor = neighbors.get(i);
-            if (!vC[currentNeighbor.row][currentNeighbor.col-1] && !vC[currentNeighbor.row][currentNeighbor.col+1]) {
-              neighbors.remove(i);
-              i--;
-            }
-          } 
-          catch(ArrayIndexOutOfBoundsException ex) {
-          }
-        }
-        currentCell = neighbors.get(int(random(neighbors.size()))); // chooses randomly a neighbor, travels it and starts again
-        vC[currentCell.row][currentCell.col] = true;
-        steps++;
-        pT[currentCell.row][currentCell.col] = steps;
+      } else {
         hP.addLast(currentCell);
+        int steps = 1;
+        while (steps < ((m*n)-1)) {
+          ArrayList<Cell> neighbors = new ArrayList<Cell>();
+          for (int i = 0; i<4; i++) {
+            switch(i) { // searches all non-visited neighbors
+            case 0:
+              if (currentCell.row-1>=0) {
+                if (!vC[currentCell.row-1][currentCell.col]) {
+                  neighbors.add(new Cell(currentCell.row-1, currentCell.col));
+                }
+              }
+              break;
+            case 1:
+              if (currentCell.col+1<n) {
+                if (!vC[currentCell.row][currentCell.col+1]) {
+                  neighbors.add(new Cell(currentCell.row, currentCell.col+1));
+                }
+              }
+              break;
+            case 2:
+              if (currentCell.row+1<m) {
+                if (!vC[currentCell.row+1][currentCell.col]) {
+                  neighbors.add(new Cell(currentCell.row+1, currentCell.col));
+                }
+              }
+              break;
+            case 3:
+              if (currentCell.col-1>=0) {
+                if (!vC[currentCell.row][currentCell.col-1]) {
+                  neighbors.add(new Cell(currentCell.row, currentCell.col-1));
+                }
+              }
+              break;
+            }
+          }
+          for (int i = 0; i<neighbors.size(); i++) { // removes neighbors that don't meet enough criteria
+            try {
+              Cell currentNeighbor = neighbors.get(i);
+              if (!vC[currentNeighbor.row][currentNeighbor.col-1] && !vC[currentNeighbor.row][currentNeighbor.col+1]) {
+                neighbors.remove(i);
+                i--;
+              }
+            } 
+            catch(ArrayIndexOutOfBoundsException ex) {
+            }
+          }
+          currentCell = neighbors.get(int(random(neighbors.size()))); // chooses randomly a neighbor, travels it and starts again
+          vC[currentCell.row][currentCell.col] = true;
+          steps++;
+          pT[currentCell.row][currentCell.col] = steps;
+          hP.addLast(currentCell);
+        }
       }
       successfulPath = true;
       for (int i=0; i<m; i++) {
         for (int j=0; j<n; j++) { 
           if (pT[i][j] == 0) {
-            pT[i][j] = m*n; 
-            hP.addLast(new Cell(i, j));
-          }
+           pT[i][j] = m*n; 
+           hP.addLast(new Cell(i, j));
+           }
 //          System.out.print(pT[i][j]+" ");
         }
 //        System.out.println("");
       }
-/*      for (int i=0; i<hP.size(); i++) {
-        System.out.println("["+hP.get(i).row+","+hP.get(i).col+"]");
+      for (int i=0; i<hP.size(); i++) {
+//        System.out.println(" HPSIZE ["+hP.get(i).row+","+hP.get(i).col+"]  "+i);
       }
-*/
+
       // relocate start and end
       int relocateStartAndEnd = 0;
-      while (relocateStartAndEnd < 1000) { // CHANGE RANDOMNESS more iterations -> greater randomness
+      while (relocateStartAndEnd < randomness) { // CHANGE RANDOMNESS more iterations -> greater randomness
         int startOrEnd = int(random(2)); // choose start or end
         switch(startOrEnd) {
         case 0:
@@ -523,14 +645,12 @@ char[][] generatePath(int n, int m) {  // By José Alberto Jurado https://github
         }
         relocateStartAndEnd++;
       }
-/*
       for (int i=0; i<m; i++) {
         for (int j=0; j<n; j++) { 
-          System.out.print(pT[i][j]+" ");
+ //         System.out.print(pT[i][j]+" ");
         }
-        System.out.println("");
+//        System.out.println("");
       }
-*/
       for (int i = 0; i<hP.size()-1; i++) {
         Cell thisCell = hP.get(i);
         Cell nextCell = hP.get(i+1);
@@ -567,13 +687,12 @@ char[][] generatePath(int n, int m) {  // By José Alberto Jurado https://github
           hG[nextCell.row][nextCell.col] = 'E';
         }
       }
-/*      for (int i=0; i<m; i++) {
+      for (int i=0; i<m; i++) {
         for (int j=0; j<n; j++) { 
-          System.out.print(pT[i][j]+""+hG[i][j]+" ");
+//          System.out.print(hG[i][j]+" ");
         }
-        System.out.println("");
+//        System.out.println("");
       }
-*/
     } 
     catch (IndexOutOfBoundsException e) {
     }
